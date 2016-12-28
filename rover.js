@@ -91,6 +91,27 @@ function turnRight(rover){
   }
 }
 
+function runCommands(commands, rover) {
+  commands.forEach (function(command) {
+    switch (command) {
+      case 'f':
+        goForward(rover);
+        break;
+      case 'b':
+        goBackward(rover);
+        break;
+      case 'r':
+        turnRight(rover);
+        break;
+      case 'l':
+        turnLeft(rover);
+        break;
+      default:
+        console.log("Unrecognized command: " + command + ". Should be one of [f, b, r, l]");
+    }
+  });
+}
+
 function printRoverPosition (rover) {
   console.log("Rover Position: [" + rover.position[0] + ", " + rover.position[1] + "]");
 }
@@ -100,3 +121,5 @@ turnRight(myRover);
 goForward(myRover);
 goBackward(myRover);
 goBackward(myRover);
+console.log("passing command list");
+runCommands(['f', 'f', 'f', 'r', 'f', 'f', 'l', 'f', 'f', 'f', 'b', 'b'], myRover);
