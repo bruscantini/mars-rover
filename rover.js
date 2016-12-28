@@ -33,6 +33,8 @@ function goForward(rover) {
       else rover.position[1]--;
       break;
   }
+
+  printRoverPosition(rover);
 }
 
 function goBackward(rover) {
@@ -52,6 +54,8 @@ function goBackward(rover) {
       rover.position[1] = (rover.position[1] + 1) % 10;
       break;
   }
+
+  printRoverPosition(rover);
 }
 
 function turnLeft(rover){
@@ -92,11 +96,7 @@ function printRoverPosition (rover) {
 }
 
 goForward(myRover);
-printRoverPosition(myRover);
 turnRight(myRover);
-printRoverPosition(myRover);
 goForward(myRover);
-printRoverPosition(myRover);
 goBackward(myRover);
 goBackward(myRover);
-printRoverPosition(myRover);
