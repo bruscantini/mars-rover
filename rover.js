@@ -1,19 +1,26 @@
 var myRover = {
+  name: "Rover A",
   position: [0,0],
   direction: 'N'
 };
 
+var theirRover = {
+  name: "Rover B",
+  position: [9,9],
+  direction: 'S'
+};
+
 var grid = [
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 1]
 ];
 
 function goForward(rover) {
@@ -37,8 +44,10 @@ function goForward(rover) {
   }
 
   if (grid[newPosX][newPosY] === 0){
+    grid[rover.position[0]][rover.position[1]] = 0;
     rover.position[0] = newPosX;
     rover.position[1] = newPosY;
+    grid[newPosX][newPosY] = 1;
   }
   else {
     console.log("Rover can't move to location [" + newPosX + ", " + newPosY +
@@ -71,8 +80,10 @@ function goBackward(rover) {
   }
 
   if (grid[newPosX][newPosY] === 0){
+    grid[rover.position[0]][rover.position[1]] = 0;
     rover.position[0] = newPosX;
     rover.position[1] = newPosY;
+    grid[newPosX][newPosY] = 1;
   }
   else {
     console.log("Rover can't move to location [" + newPosX + ", " + newPosY +
@@ -144,7 +155,7 @@ function runCommands(commands, rover) {
 }
 
 function printRoverPosition (rover) {
-  console.log("Rover Position: [" + rover.position[0] + ", " + rover.position[1] + "]");
+  console.log(rover.name + " Position: [" + rover.position[0] + ", " + rover.position[1] + "]");
 }
 
 goForward(myRover);
@@ -152,5 +163,9 @@ turnRight(myRover);
 goForward(myRover);
 goBackward(myRover);
 goBackward(myRover);
-console.log("passing command list...");
+console.log("passing command lists...");
 runCommands(['f', 'f', 'f', 'r', 'f', 'f', 'l', 'f', 'f', 'f', 'b', 'h', 'b'], myRover);
+runCommands(['r', 'f', 'f', 'f', 'f', 'f', 'f', 'f'], theirRover);
+goBackward(theirRover);
+goForward(myRover);
+goForward(myRover);
