@@ -5,7 +5,7 @@ var myRover = {
 
 var grid = [
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -17,45 +17,71 @@ var grid = [
 ];
 
 function goForward(rover) {
+  var newPosX = rover.position[0];
+  var newPosY = rover.position[1];
   switch(rover.direction) {
     case 'N':
-      rover.position[0] = (rover.position[0] + 1) % 10;
+      newPosX = (rover.position[0] + 1) % 10;
       break;
     case 'E':
-      rover.position[1] = (rover.position[1] + 1) % 10;
+      newPosY = (rover.position[1] + 1) % 10;
       break;
     case 'S':
-      if (rover.position[0] === 0) rover.position[0] = 9;
-      else rover.position[0]--;
+      if (rover.position[0] === 0) newPosX = 9;
+      else newPosX--;
       break;
     case 'W':
-      if (rover.position[1] === 0) rover.position[1] = 9;
-      else rover.position[1]--;
+      if (rover.position[1] === 0) newPosY = 9;
+      else newPosY--;
       break;
   }
 
+  if (grid[newPosX][newPosY] === 0){
+    rover.position[0] = newPosX;
+    rover.position[1] = newPosY;
+  }
+  else {
+    console.log("Rover can't move to location [" + newPosX + ", " + newPosY +
+      "]. It is occupied.");
+    return false;
+  }
+
   printRoverPosition(rover);
+  return true;
 }
 
 function goBackward(rover) {
+  var newPosX = rover.position[0];
+  var newPosY = rover.position[1];
   switch(rover.direction) {
     case 'N':
-      if (rover.position[0] === 0) rover.position[0] = 9;
-      else rover.position[0]--;
+      if (rover.position[0] === 0) newPosX = 9;
+      else newPosX--;
       break;
     case 'E':
-      if (rover.position[1] === 0) rover.position[1] = 9;
-      else rover.position[1]--;
+      if (rover.position[1] === 0) newPosY = 9;
+      else newPosY--;
       break;
     case 'S':
-      rover.position[0] = (rover.position[0] + 1) % 10;
+      newPosX = (rover.position[0] + 1) % 10;
       break;
     case 'W':
-      rover.position[1] = (rover.position[1] + 1) % 10;
+      newPosY = (rover.position[1] + 1) % 10;
       break;
   }
 
+  if (grid[newPosX][newPosY] === 0){
+    rover.position[0] = newPosX;
+    rover.position[1] = newPosY;
+  }
+  else {
+    console.log("Rover can't move to location [" + newPosX + ", " + newPosY +
+      "]. It is occupied.");
+    return false;
+  }
+
   printRoverPosition(rover);
+  return true;
 }
 
 function turnLeft(rover){
@@ -92,13 +118,15 @@ function turnRight(rover){
 }
 
 function runCommands(commands, rover) {
-  commands.forEach (function(command) {
-    switch (command) {
+
+  for (var i = 0; i < commands.length; ++i){
+    var moveSuccessful = true;
+    switch (commands[i]) {
       case 'f':
-        goForward(rover);
+        moveSuccessful = goForward(rover);
         break;
       case 'b':
-        goBackward(rover);
+        moveSuccessful = goBackward(rover);
         break;
       case 'r':
         turnRight(rover);
@@ -107,9 +135,12 @@ function runCommands(commands, rover) {
         turnLeft(rover);
         break;
       default:
-        console.log("Unrecognized command: " + command + ". Should be one of [f, b, r, l]");
+        console.log("Unrecognized command: " + commands[i] + ". Should be one of [f, b, r, l]");
     }
-  });
+    if (!moveSuccessful){
+      break;
+    }
+  }
 }
 
 function printRoverPosition (rover) {
@@ -121,5 +152,5 @@ turnRight(myRover);
 goForward(myRover);
 goBackward(myRover);
 goBackward(myRover);
-console.log("passing command list");
-runCommands(['f', 'f', 'f', 'r', 'f', 'f', 'l', 'f', 'f', 'f', 'b', 'b'], myRover);
+console.log("passing command list...");
+runCommands(['f', 'f', 'f', 'r', 'f', 'f', 'l', 'f', 'f', 'f', 'b', 'h', 'b'], myRover);
