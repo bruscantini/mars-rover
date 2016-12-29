@@ -1,14 +1,14 @@
-var myRover = {
-  name: "Rover A",
-  position: [0,0],
-  direction: 'N'
-};
+function Rover(name, position, direction) {
+  this.name = name;
+  if (position === undefined) this.position = [0, 0];
+  else this.position = position;
+  if (direction === undefined) this.direction = 'N';
+  else this.direction = direction;
+}
 
-var theirRover = {
-  name: "Rover B",
-  position: [9,9],
-  direction: 'S'
-};
+var myRover = new Rover("Rover A");
+
+var theirRover = new Rover("Rover B", [9, 9], 'S');
 
 var grid = [
   [1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -23,30 +23,30 @@ var grid = [
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 1]
 ];
 
-function goForward(rover) {
-  var newPosX = rover.position[0];
-  var newPosY = rover.position[1];
-  switch(rover.direction) {
+Rover.prototype.goForward = function () {
+  var newPosX = this.position[0];
+  var newPosY = this.position[1];
+  switch(this.direction) {
     case 'N':
-      newPosX = (rover.position[0] + 1) % 10;
+      newPosX = (this.position[0] + 1) % 10;
       break;
     case 'E':
-      newPosY = (rover.position[1] + 1) % 10;
+      newPosY = (this.position[1] + 1) % 10;
       break;
     case 'S':
-      if (rover.position[0] === 0) newPosX = 9;
+      if (this.position[0] === 0) newPosX = 9;
       else newPosX--;
       break;
     case 'W':
-      if (rover.position[1] === 0) newPosY = 9;
+      if (this.position[1] === 0) newPosY = 9;
       else newPosY--;
       break;
   }
 
   if (grid[newPosX][newPosY] === 0){
-    grid[rover.position[0]][rover.position[1]] = 0;
-    rover.position[0] = newPosX;
-    rover.position[1] = newPosY;
+    grid[this.position[0]][this.position[1]] = 0;
+    this.position[0] = newPosX;
+    this.position[1] = newPosY;
     grid[newPosX][newPosY] = 1;
   }
   else {
@@ -55,34 +55,34 @@ function goForward(rover) {
     return false;
   }
 
-  printRoverPosition(rover);
+  this.printPosition();
   return true;
-}
+};
 
-function goBackward(rover) {
-  var newPosX = rover.position[0];
-  var newPosY = rover.position[1];
-  switch(rover.direction) {
+Rover.prototype.goBackward = function () {
+  var newPosX = this.position[0];
+  var newPosY = this.position[1];
+  switch(this.direction) {
     case 'N':
-      if (rover.position[0] === 0) newPosX = 9;
+      if (this.position[0] === 0) newPosX = 9;
       else newPosX--;
       break;
     case 'E':
-      if (rover.position[1] === 0) newPosY = 9;
+      if (this.position[1] === 0) newPosY = 9;
       else newPosY--;
       break;
     case 'S':
-      newPosX = (rover.position[0] + 1) % 10;
+      newPosX = (this.position[0] + 1) % 10;
       break;
     case 'W':
-      newPosY = (rover.position[1] + 1) % 10;
+      newPosY = (this.position[1] + 1) % 10;
       break;
   }
 
   if (grid[newPosX][newPosY] === 0){
-    grid[rover.position[0]][rover.position[1]] = 0;
-    rover.position[0] = newPosX;
-    rover.position[1] = newPosY;
+    grid[this.position[0]][this.position[1]] = 0;
+    this.position[0] = newPosX;
+    this.position[1] = newPosY;
     grid[newPosX][newPosY] = 1;
   }
   else {
@@ -91,59 +91,59 @@ function goBackward(rover) {
     return false;
   }
 
-  printRoverPosition(rover);
+  this.printPosition();
   return true;
-}
+};
 
-function turnLeft(rover){
-  switch(rover.direction) {
+Rover.prototype.turnLeft = function () {
+  switch(this.direction) {
     case 'N':
-      rover.direction = 'W';
+      this.direction = 'W';
       break;
     case 'E':
-      rover.direction = 'N';
+      this.direction = 'N';
       break;
     case 'S':
-      rover.direction = 'E';
+      this.direction = 'E';
       break;
     case 'W':
-      rover.direction = 'S';
+      this.direction = 'S';
       break;
   }
-}
+};
 
-function turnRight(rover){
-  switch(rover.direction) {
+Rover.prototype.turnRight = function () {
+  switch(this.direction) {
     case 'N':
-      rover.direction = 'E';
+      this.direction = 'E';
       break;
     case 'E':
-      rover.direction = 'S';
+      this.direction = 'S';
       break;
     case 'S':
-      rover.direction = 'W';
+      this.direction = 'W';
       break;
     case 'W':
-      rover.direction = 'N';
+      this.direction = 'N';
   }
-}
+};
 
-function runCommands(commands, rover) {
+Rover.prototype.runCommands = function (commands) {
 
   for (var i = 0; i < commands.length; ++i){
     var moveSuccessful = true;
     switch (commands[i]) {
       case 'f':
-        moveSuccessful = goForward(rover);
+        moveSuccessful = this.goForward();
         break;
       case 'b':
-        moveSuccessful = goBackward(rover);
+        moveSuccessful = this.goBackward();
         break;
       case 'r':
-        turnRight(rover);
+        this.turnRight();
         break;
       case 'l':
-        turnLeft(rover);
+        this.turnLeft();
         break;
       default:
         console.log("Unrecognized command: " + commands[i] + ". Should be one of [f, b, r, l]");
@@ -152,20 +152,20 @@ function runCommands(commands, rover) {
       break;
     }
   }
-}
+};
 
-function printRoverPosition (rover) {
-  console.log(rover.name + " Position: [" + rover.position[0] + ", " + rover.position[1] + "]");
-}
+Rover.prototype.printPosition = function () {
+  console.log(this.name + " Position: [" + this.position[0] + ", " + this.position[1] + "]");
+};
 
-goForward(myRover);
-turnRight(myRover);
-goForward(myRover);
-goBackward(myRover);
-goBackward(myRover);
+myRover.goForward();
+myRover.turnRight();
+myRover.goForward();
+myRover.goBackward();
+myRover.goBackward();
 console.log("passing command lists...");
-runCommands(['f', 'f', 'f', 'r', 'f', 'f', 'l', 'f', 'f', 'f', 'b', 'h', 'b'], myRover);
-runCommands(['r', 'f', 'f', 'f', 'f', 'f', 'f', 'f'], theirRover);
-goBackward(theirRover);
-goForward(myRover);
-goForward(myRover);
+myRover.runCommands(['f', 'f', 'f', 'r', 'f', 'f', 'l', 'f', 'f', 'f', 'b', 'h', 'b']);
+theirRover.runCommands(['r', 'f', 'f', 'f', 'f', 'f', 'f', 'f']);
+theirRover.goBackward();
+myRover.goForward();
+myRover.goForward();
