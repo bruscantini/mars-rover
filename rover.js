@@ -10,8 +10,8 @@ var myRover = new Rover("Rover A");
 
 var theirRover = new Rover("Rover B", [9, 9], 'S');
 
-var grid = [
-  [1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+var mars = [
+  ['R', 0, 0, 0, 0, 0, 0, 0, 0, 0],
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -20,8 +20,21 @@ var grid = [
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 1]
+  [0, 0, 0, 0, 0, 'X', 0, 0, 0, 'R']
 ];
+
+function printMars(){
+  console.log("  Mars\n--------\n");
+  for (var row = 0; row < mars.length; ++row){
+    var lineString = "[ ";
+    for (var col = 0; col < mars[0].length; ++col){
+      lineString += mars[row][col];
+      if (col !== mars[0].length - 1) lineString += ", ";
+      else lineString += " ]";
+    }
+    console.log(lineString);
+  }
+}
 
 Rover.prototype.goForward = function () {
   var newPosX = this.position[0];
@@ -43,11 +56,11 @@ Rover.prototype.goForward = function () {
       break;
   }
 
-  if (grid[newPosX][newPosY] === 0){
-    grid[this.position[0]][this.position[1]] = 0;
+  if (mars[newPosX][newPosY] === 0){
+    mars[this.position[0]][this.position[1]] = 0;
     this.position[0] = newPosX;
     this.position[1] = newPosY;
-    grid[newPosX][newPosY] = 1;
+    mars[newPosX][newPosY] = 'R';
   }
   else {
     console.log("Rover can't move to location [" + newPosX + ", " + newPosY +
@@ -79,11 +92,11 @@ Rover.prototype.goBackward = function () {
       break;
   }
 
-  if (grid[newPosX][newPosY] === 0){
-    grid[this.position[0]][this.position[1]] = 0;
+  if (mars[newPosX][newPosY] === 0){
+    mars[this.position[0]][this.position[1]] = 0;
     this.position[0] = newPosX;
     this.position[1] = newPosY;
-    grid[newPosX][newPosY] = 1;
+    mars[newPosX][newPosY] = 'R';
   }
   else {
     console.log("Rover can't move to location [" + newPosX + ", " + newPosY +
@@ -163,9 +176,14 @@ myRover.turnRight();
 myRover.goForward();
 myRover.goBackward();
 myRover.goBackward();
-console.log("passing command lists...");
 myRover.runCommands(['f', 'f', 'f', 'r', 'f', 'f', 'l', 'f', 'f', 'f', 'b', 'h', 'b']);
+printMars();
 theirRover.runCommands(['r', 'f', 'f', 'f', 'f', 'f', 'f', 'f']);
+printMars();
 theirRover.goBackward();
+printMars();
 myRover.goForward();
+printMars();
 myRover.goForward();
+
+printMars();
